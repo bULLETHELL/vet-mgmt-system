@@ -85,6 +85,18 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Markdowns\CRUD.md" />
+    <None Include="Markdowns\EF.md" />
+    <None Include="Markdowns\EventHandling.md" />
+    <None Include="Markdowns\GUI.md" />
+    <None Include="Markdowns\Multithreading.md" />
+    <None Include="Markdowns\MVC.md" />
+    <None Include="Markdowns\MVVM.md" />
+    <None Include="Markdowns\SPA.md" />
+    <None Include="Markdowns\UIDataBinding.md" />
+    <None Include="Markdowns\UIDesignPatterns.md" />
+    <None Include="Markdowns\UsabilityTest.md" />
+    <None Include="Markdowns\WPF.md" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
