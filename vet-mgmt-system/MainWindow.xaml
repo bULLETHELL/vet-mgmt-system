@@ -6,7 +6,13 @@
         xmlns:local="clr-namespace:vet_mgmt_system"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_User Management">
+                <MenuItem Header="_Create" Click="UserMgmtCreate_Click"/>
+                <MenuItem Header="_Delete" />
+            </MenuItem>
+        </Menu>
+        <TextBox AcceptsReturn="True" />
+    </DockPanel>
 </Window>

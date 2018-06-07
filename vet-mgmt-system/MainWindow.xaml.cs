@@ -24,5 +24,16 @@ namespace vet_mgmt_system
         {
             InitializeComponent();
         }
+
+        private void UserMgmtCreate_Click(object sender, RoutedEventArgs e)
+        {
+            Window createUserWindow = new Window();
+            createUserWindow.Width = 200;
+            createUserWindow.Show();
+            var stackPanel = new StackPanel { Orientation = Orientation.Vertical };
+            stackPanel.Children.Add(new Label { Content = "Name" , HorizontalAlignment = HorizontalAlignment.Center});
+            stackPanel.Children.Add(new TextBox());
+            createUserWindow.Content = stackPanel;
+        }
     }
 }
