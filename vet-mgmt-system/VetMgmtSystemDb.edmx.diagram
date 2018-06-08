@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="7922d96b46fc49efbd537bdcdd55f196" Name="Diagram1">
+      <Diagram DiagramId="6a490ebeb68049819e5045d75bcf7418" Name="Diagram1">
         <EntityTypeShape EntityType="VetMgmtSystemDbModel.Address" Width="1.5" PointX="1.5" PointY="21" IsExpanded="true" />
         <EntityTypeShape EntityType="VetMgmtSystemDbModel.Animal" Width="1.5" PointX="1.5" PointY="13.625" IsExpanded="true" />
         <EntityTypeShape EntityType="VetMgmtSystemDbModel.Date" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
@@ -13,15 +13,16 @@
         <EntityTypeShape EntityType="VetMgmtSystemDbModel.Patient" Width="1.5" PointX="0.75" PointY="9.5" IsExpanded="true" />
         <EntityTypeShape EntityType="VetMgmtSystemDbModel.PatientsMedicalProcedure" Width="1.5" PointX="3" PointY="2.25" IsExpanded="true" />
         <EntityTypeShape EntityType="VetMgmtSystemDbModel.PriceHistory" Width="1.5" PointX="3" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="VetMgmtSystemDbModel.sysdiagram" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="VetMgmtSystemDbModel.ZipCity" Width="1.5" PointX="1.5" PointY="23.5" IsExpanded="true" />
-        <AssociationConnector Association="VetMgmtSystemDbModel.FK__Owners__AddressI__5BE2A6F2" ManuallyRouted="false" />
-        <AssociationConnector Association="VetMgmtSystemDbModel.FK__Patients__Animal__59063A47" ManuallyRouted="false" />
-        <AssociationConnector Association="VetMgmtSystemDbModel.FK__PatientsMe__Date__5CD6CB2B" ManuallyRouted="false" />
-        <AssociationConnector Association="VetMgmtSystemDbModel.FK__PatientsM__Proce__5EBF139D" ManuallyRouted="false" />
-        <AssociationConnector Association="VetMgmtSystemDbModel.FK__PriceHist__Price__5FB337D6" ManuallyRouted="false" />
-        <AssociationConnector Association="VetMgmtSystemDbModel.FK__Owners__ZipCode__5AEE82B9" ManuallyRouted="false" />
-        <AssociationConnector Association="VetMgmtSystemDbModel.FK__Patients__OwnerI__59FA5E80" ManuallyRouted="false" />
-        <AssociationConnector Association="VetMgmtSystemDbModel.FK__PatientsM__Patie__5DCAEF64" ManuallyRouted="false" />
+        <AssociationConnector Association="VetMgmtSystemDbModel.FK__Owners__AddressI__22AA2996" ManuallyRouted="false" />
+        <AssociationConnector Association="VetMgmtSystemDbModel.FK__Patients__Animal__1FCDBCEB" ManuallyRouted="false" />
+        <AssociationConnector Association="VetMgmtSystemDbModel.FK__PatientsMe__Date__239E4DCF" ManuallyRouted="false" />
+        <AssociationConnector Association="VetMgmtSystemDbModel.FK__PatientsM__Proce__25869641" ManuallyRouted="false" />
+        <AssociationConnector Association="VetMgmtSystemDbModel.FK__PriceHist__Price__267ABA7A" ManuallyRouted="false" />
+        <AssociationConnector Association="VetMgmtSystemDbModel.FK__Owners__ZipCode__21B6055D" ManuallyRouted="false" />
+        <AssociationConnector Association="VetMgmtSystemDbModel.FK__Patients__OwnerI__20C1E124" ManuallyRouted="false" />
+        <AssociationConnector Association="VetMgmtSystemDbModel.FK__PatientsM__Patie__24927208" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

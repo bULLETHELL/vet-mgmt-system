@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\SDE-04044\Documents\Github\vet-mgmt-system\vet-mgmt-system\vet-mgmt-system\VetMgmtSystemDb.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\andr439d\Source\Repos\vet-mgmt-system\vet-mgmt-system\VetMgmtSystemDb.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

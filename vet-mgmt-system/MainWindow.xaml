@@ -10,7 +10,7 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_User Management">
                 <MenuItem Header="_Create" Click="UserMgmtCreate_Click"/>
-                <MenuItem Header="_Delete" />
+                <MenuItem Header="_Delete" Click="UserMgmtDelete_Click"/>
             </MenuItem>
         </Menu>
         <TextBox AcceptsReturn="True" />
