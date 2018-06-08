@@ -74,10 +74,16 @@
     <Compile Include="Date.cs">
       <DependentUpon>VetMgmtSystemDb.tt</DependentUpon>
     </Compile>
+    <Compile Include="DeletableUser.cs">
+      <DependentUpon>VetMgmtSystemDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="MedicalProcedure.cs">
       <DependentUpon>VetMgmtSystemDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Owner.cs">
+      <DependentUpon>VetMgmtSystemDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Owner_View.cs">
       <DependentUpon>VetMgmtSystemDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Patient.cs">

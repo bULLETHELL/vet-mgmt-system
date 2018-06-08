@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace vet_mgmt_system
 {
     /// <summary>
@@ -24,7 +25,8 @@ namespace vet_mgmt_system
         {
             InitializeComponent();
         }
-
+        Window DeleteUserWindow = new Window();
+        DataGrid DeleteableUsersDG = new DataGrid();
         TextBox firstNameTextBox = new TextBox();
         TextBox lastNameTextBox = new TextBox();
         TextBox zipCodeTextBox = new TextBox();
@@ -52,21 +54,33 @@ namespace vet_mgmt_system
         }
         private void UserMgmtDelete_Click(object sender, RoutedEventArgs e)
         {
-            Window DeleteUserWindow = new Window();
             DeleteUserWindow.Height = 400;
             DeleteUserWindow.Width = 200;
             DeleteUserWindow.Show();
             Button deleteButton = new Button() { Content = "Delete" };
             Button SearchButton = new Button() { Content = "Search" };
             deleteButton.Click += DeleteButton_Click;
+            SearchButton.Click += SearchButton_Click;
             var stackPanel = new StackPanel { Orientation = Orientation.Vertical };
             stackPanel.Children.Add(new Label { Content = "Search for a User" });
-            stackPanel.Children.Add(new Label { Content = "only delete a user if the user has no patients registered in the system" });
+            //stackPanel.Children.Add(new Label { Content = "only delete a user if the user has no patients registered in the system" });
             stackPanel.Children.Add(new TextBox { });
-            stackPanel.Children.Add(new DataGrid { });
-            
-          
+            stackPanel.Children.Add(SearchButton);
+            stackPanel.Children.Add(DeleteableUsersDG);
+            stackPanel.Children.Add(deleteButton);
             DeleteUserWindow.Content = stackPanel;
+        }
+
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            using (var context = new VetMgmtSystemDbEntities())
+            {
+                List<DeletableUser> list = new List<DeletableUser>();
+                var dg = new DataGrid();
+                list = context.DeletableUsers.ToList();
+                dg.ItemsSource = list;
+                DeleteableUsersDG = dg;
+            }
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
