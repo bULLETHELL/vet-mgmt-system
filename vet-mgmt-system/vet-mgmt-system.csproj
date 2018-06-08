@@ -87,6 +87,9 @@
     <Compile Include="PriceHistory.cs">
       <DependentUpon>VetMgmtSystemDb.tt</DependentUpon>
     </Compile>
+    <Compile Include="TreatmentHistory.cs">
+      <DependentUpon>VetMgmtSystemDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="VetMgmtSystemDb.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

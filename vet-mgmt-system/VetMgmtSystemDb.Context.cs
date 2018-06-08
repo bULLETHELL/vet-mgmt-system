@@ -34,5 +34,6 @@ namespace vet_mgmt_system
         public virtual DbSet<PatientsMedicalProcedure> PatientsMedicalProcedures { get; set; }
         public virtual DbSet<PriceHistory> PriceHistories { get; set; }
         public virtual DbSet<ZipCity> ZipCities { get; set; }
+        public virtual DbSet<TreatmentHistory> TreatmentHistories { get; set; }
     }
 }

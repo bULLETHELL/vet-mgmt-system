@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace vet_mgmt_system
 {
@@ -70,6 +61,22 @@ namespace vet_mgmt_system
 
                 //  Save changes to DB
                 context.SaveChanges();
+            }
+        }
+
+        private void ViewTreatments_Click(object sender, RoutedEventArgs e)
+        {
+            using (var context = new VetMgmtSystemDbEntities())
+            {
+                Window viewTreatmentsWindow = new Window();
+                List<TreatmentHistory> list = new List<TreatmentHistory>();
+                var dg = new DataGrid();
+
+                viewTreatmentsWindow.Show();
+
+                list = context.TreatmentHistories.ToList();
+                dg.ItemsSource = list;
+                viewTreatmentsWindow.Content = dg;
             }
         }
     }

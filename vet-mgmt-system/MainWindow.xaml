@@ -12,6 +12,9 @@
                 <MenuItem Header="_Create" Click="UserMgmtCreate_Click"/>
                 <MenuItem Header="_Delete" />
             </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="_Treatments" Click="ViewTreatments_Click"/>
+            </MenuItem>
         </Menu>
         <TextBox AcceptsReturn="True" />
     </DockPanel>
