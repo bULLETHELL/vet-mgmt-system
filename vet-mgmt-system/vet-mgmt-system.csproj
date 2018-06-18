@@ -87,6 +87,21 @@
     <Compile Include="PriceHistory.cs">
       <DependentUpon>VetMgmtSystemDb.tt</DependentUpon>
     </Compile>
+    <Compile Include="proc_GetInvoiceByOwnerName_Result.cs">
+      <DependentUpon>VetMgmtSystemDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="proc_GetInvoiceByOwnerName_Result1.cs">
+      <DependentUpon>VetMgmtSystemDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>VetMgmtSystemDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_helpdiagrams_Result.cs">
+      <DependentUpon>VetMgmtSystemDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagram.cs">
+      <DependentUpon>VetMgmtSystemDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="TreatmentHistory.cs">
       <DependentUpon>VetMgmtSystemDb.tt</DependentUpon>
     </Compile>
@@ -105,6 +120,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>VetMgmtSystemDb.edmx</DependentUpon>
     </Compile>
+    <Compile Include="ViewInvoicesWindow.xaml.cs">
+      <DependentUpon>ViewInvoicesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ZipCity.cs">
       <DependentUpon>VetMgmtSystemDb.tt</DependentUpon>
     </Compile>
@@ -120,6 +138,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ViewInvoicesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

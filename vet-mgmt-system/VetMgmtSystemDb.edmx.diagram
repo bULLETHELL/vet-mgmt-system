@@ -23,6 +23,7 @@
         <AssociationConnector Association="VetMgmtSystemDbModel.FK__Patients__OwnerI__59FA5E80" ManuallyRouted="false" />
         <AssociationConnector Association="VetMgmtSystemDbModel.FK__PatientsM__Patie__5DCAEF64" ManuallyRouted="false" />
         <EntityTypeShape EntityType="VetMgmtSystemDbModel.TreatmentHistory" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="VetMgmtSystemDbModel.sysdiagram" Width="1.5" PointX="5.375" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

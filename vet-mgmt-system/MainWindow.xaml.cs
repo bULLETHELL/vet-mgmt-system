@@ -20,6 +20,9 @@ namespace vet_mgmt_system
         TextBox lastNameTextBox = new TextBox();
         TextBox zipCodeTextBox = new TextBox();
         TextBox addressIDTextBox = new TextBox();
+        public TextBox tbOwnerName = new TextBox();
+        StackPanel spInvoices = new StackPanel();
+        StackPanel spUserCreate = new StackPanel { Orientation = Orientation.Vertical };
 
         public void UserMgmtCreate_Click(object sender, RoutedEventArgs e)
         {
@@ -28,18 +31,27 @@ namespace vet_mgmt_system
             createUserWindow.Show();
             Button createButton = new Button() { Content = "Create" };
             createButton.Click += CreateButton_Click;
-            var stackPanel = new StackPanel { Orientation = Orientation.Vertical };
 
-            stackPanel.Children.Add(new Label { Content = "First Name", HorizontalAlignment = HorizontalAlignment.Center });
-            stackPanel.Children.Add(firstNameTextBox);
-            stackPanel.Children.Add(new Label { Content = "Last Name", HorizontalAlignment = HorizontalAlignment.Center });
-            stackPanel.Children.Add(lastNameTextBox);
-            stackPanel.Children.Add(new Label { Content = "Zip Code", HorizontalAlignment = HorizontalAlignment.Center });
-            stackPanel.Children.Add(zipCodeTextBox);
-            stackPanel.Children.Add(new Label { Content = "Address ID", HorizontalAlignment = HorizontalAlignment.Center });
-            stackPanel.Children.Add(addressIDTextBox);
-            stackPanel.Children.Add(createButton);  
-            createUserWindow.Content = stackPanel;
+            if (spUserCreate.Children.Count == 0)
+            {
+                spUserCreate.Children.Add(new Label { Content = "First Name", HorizontalAlignment = HorizontalAlignment.Center });
+                spUserCreate.Children.Add(firstNameTextBox);
+                spUserCreate.Children.Add(new Label { Content = "Last Name", HorizontalAlignment = HorizontalAlignment.Center });
+                spUserCreate.Children.Add(lastNameTextBox);
+                spUserCreate.Children.Add(new Label { Content = "Zip Code", HorizontalAlignment = HorizontalAlignment.Center });
+                spUserCreate.Children.Add(zipCodeTextBox);
+                spUserCreate.Children.Add(new Label { Content = "Address ID", HorizontalAlignment = HorizontalAlignment.Center });
+                spUserCreate.Children.Add(addressIDTextBox);
+                spUserCreate.Children.Add(createButton);
+            }
+            createUserWindow.Content = spUserCreate;
+            createUserWindow.Closing += CreateUserWindow_Closing;
+        }
+
+        private void CreateUserWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Clear the stackpanel when window closes to avoid errors
+            spUserCreate.Children.Clear();
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
@@ -78,6 +90,24 @@ namespace vet_mgmt_system
                 dg.ItemsSource = list;
                 viewTreatmentsWindow.Content = dg;
             }
+        }
+
+        private void ViewInvoices_Click(object sender, RoutedEventArgs e)
+        {
+            Window createInvoicesWindow = new Window();
+            Button searchInvoiceButton = new Button() { Content = "Create Invoice", HorizontalAlignment = HorizontalAlignment.Center};
+            searchInvoiceButton.Click += SearchInvoiceButton_Click;
+            createInvoicesWindow.Show();
+            spInvoices.Children.Add(new Label { Content = "Search Owners", HorizontalAlignment = HorizontalAlignment.Center});
+            spInvoices.Children.Add(tbOwnerName);
+            spInvoices.Children.Add(searchInvoiceButton);
+            createInvoicesWindow.Content = spInvoices;
+        }
+
+        private void SearchInvoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            ViewInvoicesWindow viewInvoicesWindow = new ViewInvoicesWindow();
+            viewInvoicesWindow.Show();
         }
     }
 }

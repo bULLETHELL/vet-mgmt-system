@@ -1,0 +1,31 @@
+﻿<Window x:Class="vet_mgmt_system.ViewInvoicesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:vet_mgmt_system"
+        mc:Ignorable="d"
+        Title="Invoices" Height="600" Width="1000"
+        ResizeMode="NoResize"
+        Loaded="ViewInvoicesWindow_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150*"/>
+            <ColumnDefinition Width="347*"/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Mortens Dyrehospital" Height="41" Margin="10,3,0,0" VerticalAlignment="Top" FontSize="20" HorizontalAlignment="Left" Width="290"/>
+        <Label Content="Rugårdsvej 105" Margin="10,28,0,0" FontSize="20" Height="42" VerticalAlignment="Top" HorizontalAlignment="Left" Width="290"/>
+        <Label Content="5000 Odense C" HorizontalAlignment="Left" Height="42" Margin="10,55,0,0" VerticalAlignment="Top" Width="290" FontSize="20"/>
+        <Label Content="date" Height="43" Margin="522,0,0,521" VerticalAlignment="Bottom" FontSize="20" Name="dateLabel" Grid.Column="1"/>
+        <Label Content="Invoice" Height="50" Margin="133,0,439,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="30" Grid.Column="1"/>
+        <Label Content="Morten Oleander Nielsen" Margin="10,128,0,0" FontSize="20" Name="ownerNameLabel" HorizontalAlignment="Left" Width="290" Height="38" VerticalAlignment="Top"/>
+        <Label Content="Beringsvej 69" Height="42" Margin="10,156,0,0" VerticalAlignment="Top" FontSize="20" Name="ownerAddressLabel" HorizontalAlignment="Left" Width="290"/>
+        <Label Content="8700 Horsens" Height="42" Margin="10,182,0,0" VerticalAlignment="Top" FontSize="20" Name="ownerZipCityLabel" HorizontalAlignment="Left" Width="290"/>
+        <Label Content="Patient" HorizontalAlignment="Left" Height="50" Margin="10,258,0,0" VerticalAlignment="Top" Width="114" FontWeight="Bold" FontSize="30"/>
+        <Label Content="Treatment" HorizontalAlignment="Left" Height="50" Margin="83,258,0,0" VerticalAlignment="Top" Width="172" FontWeight="Bold" FontSize="30" Grid.Column="1"/>
+        <Label Content="Price" HorizontalAlignment="Left" Height="50" Margin="436,258,0,0" VerticalAlignment="Top" Width="253" FontWeight="Bold" FontSize="30" Grid.Column="1"/>
+        <ItemsControl HorizontalAlignment="Left" Height="263" Margin="16,308,0,0" VerticalAlignment="Top" Width="378" Name="patientItemsControl" Grid.ColumnSpan="2" FontSize="20"/>
+        <ItemsControl HorizontalAlignment="Left" Height="263" Margin="93,308,0,0" VerticalAlignment="Top" Width="343" Name="treatmentItemsControl" Grid.Column="1" FontSize="20"/>
+        <ItemsControl HorizontalAlignment="Left" Height="263" Margin="440,308,-14,0" VerticalAlignment="Top" Width="267" x:Name="priceItemsControl" Grid.Column="1" FontSize="20"/>
+    </Grid>
+</Window>

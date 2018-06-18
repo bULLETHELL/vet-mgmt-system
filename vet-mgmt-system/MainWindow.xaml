@@ -14,6 +14,7 @@
             </MenuItem>
             <MenuItem Header="_View">
                 <MenuItem Header="_Treatments" Click="ViewTreatments_Click"/>
+                <MenuItem Header="_Invoices" Click="ViewInvoices_Click"/>
             </MenuItem>
         </Menu>
         <TextBox AcceptsReturn="True" />
