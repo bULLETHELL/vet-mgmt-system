@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Linq;
 using System.Collections.Generic;
+using System.Windows.Media;
 
 namespace vet_mgmt_system
 {
@@ -16,42 +18,57 @@ namespace vet_mgmt_system
             InitializeComponent();
         }
 
-        TextBox firstNameTextBox = new TextBox();
-        TextBox lastNameTextBox = new TextBox();
-        TextBox zipCodeTextBox = new TextBox();
-        TextBox addressIDTextBox = new TextBox();
         public TextBox tbOwnerName = new TextBox();
+        TextBox tbFirstName = new TextBox();
+        TextBox tbLastName = new TextBox();
+        TextBox tbZipCode = new TextBox();
+        TextBox tbCity = new TextBox();
+        TextBox tbStreetName = new TextBox();
+        TextBox tbStreetNo = new TextBox();
         StackPanel spInvoices = new StackPanel();
         StackPanel spUserCreate = new StackPanel { Orientation = Orientation.Vertical };
 
         public void UserMgmtCreate_Click(object sender, RoutedEventArgs e)
         {
-            Window createUserWindow = new Window();
-            createUserWindow.Width = 200;
-            createUserWindow.Show();
+            // Clear stackpanel
+            spMainWindow.Children.Clear();
+
             Button createButton = new Button() { Content = "Create" };
             createButton.Click += CreateButton_Click;
 
-            if (spUserCreate.Children.Count == 0)
-            {
-                spUserCreate.Children.Add(new Label { Content = "First Name", HorizontalAlignment = HorizontalAlignment.Center });
-                spUserCreate.Children.Add(firstNameTextBox);
-                spUserCreate.Children.Add(new Label { Content = "Last Name", HorizontalAlignment = HorizontalAlignment.Center });
-                spUserCreate.Children.Add(lastNameTextBox);
-                spUserCreate.Children.Add(new Label { Content = "Zip Code", HorizontalAlignment = HorizontalAlignment.Center });
-                spUserCreate.Children.Add(zipCodeTextBox);
-                spUserCreate.Children.Add(new Label { Content = "Address ID", HorizontalAlignment = HorizontalAlignment.Center });
-                spUserCreate.Children.Add(addressIDTextBox);
-                spUserCreate.Children.Add(createButton);
-            }
-            createUserWindow.Content = spUserCreate;
-            createUserWindow.Closing += CreateUserWindow_Closing;
+            spMainWindow.Children.Add(new Label { Content = "First Name", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(tbFirstName);
+            spMainWindow.Children.Add(new Label { Content = "Last Name", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(tbLastName);
+            spMainWindow.Children.Add(new Label { Content = "Zip Code", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(tbZipCode);
+            spMainWindow.Children.Add(new Label { Content = "City", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(tbCity);
+            spMainWindow.Children.Add(new Label { Content = "Street Name", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(tbStreetName);
+            spMainWindow.Children.Add(new Label { Content = "Street Number", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(tbStreetNo);
+            spMainWindow.Children.Add(createButton);
         }
 
-        private void CreateUserWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        public void UserMgmtDelete_Click(object sender, RoutedEventArgs e)
         {
-            // Clear the stackpanel when window closes to avoid errors
-            spUserCreate.Children.Clear();
+            // Clear stackpanel
+            spMainWindow.Children.Clear();
+
+            Button deleteButton = new Button() { Content = "Delete" };
+            deleteButton.Click += DeleteButton_Click;
+
+            spMainWindow.Children.Add(new Label { Content = "First Name", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(tbFirstName);
+            spMainWindow.Children.Add(new Label { Content = "Last Name", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(tbLastName);
+            spMainWindow.Children.Add(deleteButton);
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: IMPLEMENT THIS FUNCTION
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
@@ -59,20 +76,53 @@ namespace vet_mgmt_system
             //  Using the database
             using (var context = new VetMgmtSystemDbEntities())
             {
-                //  Make instance of owner object
-                var owner = new Owner()
+                //  Check if address and zipCity already exists in the database to avoid redundant data and FK errors
+                if (!context.Addresses.Any(a => a.StreetName == tbStreetName.Text && a.StreetNo == tbStreetNo.Text) && !context.ZipCities.Any(z => z.ZipCode == Convert.ToInt32(tbZipCode.Text) && z.City == tbCity.Text))
                 {
-                    FirstName = firstNameTextBox.Text,
-                    LastName = lastNameTextBox.Text,
-                    ZipCode = Convert.ToInt32(zipCodeTextBox.Text),
-                    AddressID = Convert.ToInt32(addressIDTextBox.Text)
-                };
+                    //  Make new instance of Address object
+                    var address = new Address()
+                    {
+                        StreetName = tbStreetName.Text,
+                        StreetNo = tbStreetNo.Text
+                    };
 
-                //  Add owner object to owners table
-                context.Owners.Add(owner);
+                    //  Add address object to addresses table
+                    context.Addresses.Add(address);
 
-                //  Save changes to DB
-                context.SaveChanges();
+                    //  Make instance of ZipCity object
+                    var zipCity = new ZipCity()
+                    {
+                        ZipCode = Convert.ToInt32(tbZipCode.Text),
+                        City = tbCity.Text
+                    };
+
+                    //  Add ZipCity object to ZipCities table
+                    context.ZipCities.Add(zipCity);
+
+                    //  Make instance of owner object
+                    var owner = new Owner()
+                    {
+                        FirstName = tbFirstName.Text,
+                        LastName = tbLastName.Text,
+                        ZipCode = Convert.ToInt32(tbZipCode.Text),
+                        AddressID = address.AddressID
+                    };
+
+                    //  Add owner object to owners table
+                    context.Owners.Add(owner);
+
+                    //  Save changes to DB
+                    context.SaveChanges();
+                }
+                else
+                {
+                    // Create popup
+                    var popup = new Popup();
+                    var dockPanel = new DockPanel();
+                    popup.Child = dockPanel;
+                    dockPanel.Children.Add(new TextBox { Text = "First Child" });
+                    popup.IsOpen = true;
+                }
             }
         }
 
@@ -94,14 +144,15 @@ namespace vet_mgmt_system
 
         private void ViewInvoices_Click(object sender, RoutedEventArgs e)
         {
-            Window createInvoicesWindow = new Window();
-            Button searchInvoiceButton = new Button() { Content = "Create Invoice", HorizontalAlignment = HorizontalAlignment.Center};
+            // Clear stackpanel
+            spMainWindow.Children.Clear();
+
+            Button searchInvoiceButton = new Button() { Content = "Create Invoice", HorizontalAlignment = HorizontalAlignment.Center };
             searchInvoiceButton.Click += SearchInvoiceButton_Click;
-            createInvoicesWindow.Show();
-            spInvoices.Children.Add(new Label { Content = "Search Owners", HorizontalAlignment = HorizontalAlignment.Center});
-            spInvoices.Children.Add(tbOwnerName);
-            spInvoices.Children.Add(searchInvoiceButton);
-            createInvoicesWindow.Content = spInvoices;
+
+            spMainWindow.Children.Add(new Label { Content = "Search Owners", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(tbOwnerName);
+            spMainWindow.Children.Add(searchInvoiceButton);
         }
 
         private void SearchInvoiceButton_Click(object sender, RoutedEventArgs e)

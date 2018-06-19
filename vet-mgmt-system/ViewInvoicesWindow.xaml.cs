@@ -1,16 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace vet_mgmt_system
 {
@@ -57,9 +48,11 @@ namespace vet_mgmt_system
                 }
 
                 // Content
-                ownerNameLabel.Content = firstNames.FirstOrDefault() + " " + lastNames.FirstOrDefault();
-                ownerAddressLabel.Content = streetNames.FirstOrDefault() + " " + streetNumbers.FirstOrDefault();
-                ownerZipCityLabel.Content = cities.FirstOrDefault() + " " + zipCodes.FirstOrDefault();
+                this.Title = $"Invoice - {firstNames.FirstOrDefault()} {lastNames.FirstOrDefault()}";
+
+                ownerNameLabel.Content = $"{firstNames.FirstOrDefault()} {lastNames.FirstOrDefault()}";
+                ownerAddressLabel.Content = $"{streetNames.FirstOrDefault()} {streetNumbers.FirstOrDefault()}";
+                ownerZipCityLabel.Content = $"{zipCodes.FirstOrDefault()} {cities.FirstOrDefault()}";
                 dateLabel.Content = DateTime.Today;
                 patientItemsControl.ItemsSource = patients;
                 treatmentItemsControl.ItemsSource = treatments;
