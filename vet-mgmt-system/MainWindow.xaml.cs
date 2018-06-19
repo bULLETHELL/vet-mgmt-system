@@ -18,6 +18,7 @@ namespace vet_mgmt_system
             InitializeComponent();
         }
 
+        #region Variables
         public TextBox tbOwnerName = new TextBox();
         TextBox tbFirstName = new TextBox();
         TextBox tbLastName = new TextBox();
@@ -25,16 +26,18 @@ namespace vet_mgmt_system
         TextBox tbCity = new TextBox();
         TextBox tbStreetName = new TextBox();
         TextBox tbStreetNo = new TextBox();
-        StackPanel spInvoices = new StackPanel();
-        StackPanel spUserCreate = new StackPanel { Orientation = Orientation.Vertical };
+        List<Owner> ownersList = new List<Owner>();
+        List<Owner> uOwnersList = new List<Owner>();
+        #endregion
 
+        #region Owner Creation
         public void UserMgmtCreate_Click(object sender, RoutedEventArgs e)
         {
             // Clear stackpanel
             spMainWindow.Children.Clear();
 
             Button createButton = new Button() { Content = "Create" };
-            createButton.Click += CreateButton_Click;
+            createButton.Click += OwnerCreateButton_Click;
 
             spMainWindow.Children.Add(new Label { Content = "First Name", HorizontalAlignment = HorizontalAlignment.Center });
             spMainWindow.Children.Add(tbFirstName);
@@ -51,27 +54,7 @@ namespace vet_mgmt_system
             spMainWindow.Children.Add(createButton);
         }
 
-        public void UserMgmtDelete_Click(object sender, RoutedEventArgs e)
-        {
-            // Clear stackpanel
-            spMainWindow.Children.Clear();
-
-            Button deleteButton = new Button() { Content = "Delete" };
-            deleteButton.Click += DeleteButton_Click;
-
-            spMainWindow.Children.Add(new Label { Content = "First Name", HorizontalAlignment = HorizontalAlignment.Center });
-            spMainWindow.Children.Add(tbFirstName);
-            spMainWindow.Children.Add(new Label { Content = "Last Name", HorizontalAlignment = HorizontalAlignment.Center });
-            spMainWindow.Children.Add(tbLastName);
-            spMainWindow.Children.Add(deleteButton);
-        }
-
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
-        {
-            // TODO: IMPLEMENT THIS FUNCTION
-        }
-
-        private void CreateButton_Click(object sender, RoutedEventArgs e)
+        private void OwnerCreateButton_Click(object sender, RoutedEventArgs e)
         {
             //  Using the database
             using (var context = new VetMgmtSystemDbEntities())
@@ -125,40 +108,166 @@ namespace vet_mgmt_system
                 }
             }
         }
+        #endregion
 
-        private void ViewTreatments_Click(object sender, RoutedEventArgs e)
-        {
-            using (var context = new VetMgmtSystemDbEntities())
-            {
-                Window viewTreatmentsWindow = new Window();
-                List<TreatmentHistory> list = new List<TreatmentHistory>();
-                var dg = new DataGrid();
-
-                viewTreatmentsWindow.Show();
-
-                list = context.TreatmentHistories.ToList();
-                dg.ItemsSource = list;
-                viewTreatmentsWindow.Content = dg;
-            }
-        }
-
-        private void ViewInvoices_Click(object sender, RoutedEventArgs e)
+        #region Owner Deletion
+        public void UserMgmtDelete_Click(object sender, RoutedEventArgs e)
         {
             // Clear stackpanel
             spMainWindow.Children.Clear();
 
-            Button searchInvoiceButton = new Button() { Content = "Create Invoice", HorizontalAlignment = HorizontalAlignment.Center };
-            searchInvoiceButton.Click += SearchInvoiceButton_Click;
+            Button searchButton = new Button() { Content = "Search" };
+            searchButton.Click += OwnerSearchButton_Click;
+
+            spMainWindow.Children.Add(new Label { Content = "First Name", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(tbFirstName);
+            spMainWindow.Children.Add(new Label { Content = "Last Name", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(tbLastName);
+            spMainWindow.Children.Add(searchButton);
+        }
+
+        private void OwnerSearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            using (var context = new VetMgmtSystemDbEntities())
+            {
+                ownersList = context.Owners.ToList();
+                uOwnersList = ownersList.FindAll(o => o.FirstName == tbFirstName.Text && o.LastName == tbLastName.Text);
+                var lb = new ListBox();
+                Button deleteOwnerButton = new Button() { Content = "Delete" };
+
+                deleteOwnerButton.Click += DeleteOwnerButton_Click;
+
+                foreach (Owner owner in uOwnersList)
+                {
+                    lb.Items.Add(new ListBoxItem() { Content = $"{owner.OwnerID} {owner.FirstName} {owner.LastName} {owner.Address.StreetName} {owner.Address.StreetNo}", Name = $"lbItem{owner.OwnerID}" });
+                }
+
+                spMainWindow.Children.Add(lb);
+                spMainWindow.Children.Add(deleteOwnerButton);
+            }
+        }
+
+        private void DeleteOwnerButton_Click(object sender, RoutedEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+        #endregion
+
+        #region View All Owners
+        public void UserMgmtViewAll_Click(object sender, RoutedEventArgs e)
+        {
+            //  TODO: FIX THIS(MAYBE VIEW INSTEAD)
+
+            using (var context = new VetMgmtSystemDbEntities())
+            {
+                List<Owner> list = context.Owners.ToList();
+
+                var dg = new DataGrid();
+
+                dg.ItemsSource = list;
+                spMainWindow.Children.Add(dg);
+            }
+        }
+        #endregion
+
+        #region Patient Creation
+        public void PatientMgmtCreate_Click(object sender, RoutedEventArgs e)
+        {
+            //  TODO: IMPLEMENT THIS FUNCTION
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region Patient Deletion
+        public void PatientMgmtDelete_Click(object sender, RoutedEventArgs e)
+        {
+            //  TODO: IMPLEMENT THIS FUNCTION
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region View All Patient
+        public void PatientMgmtViewAll_Click(object sender, RoutedEventArgs e)
+        {
+            //  TODO: FIX THIS(MAYBE VIEW INSTEAD)
+            using (var context = new VetMgmtSystemDbEntities())
+            {
+                List<Patient> list = context.Patients.ToList();
+
+                var dg = new DataGrid();
+
+                dg.ItemsSource = list;
+                spMainWindow.Children.Add(dg);
+            }
+        }
+        #endregion
+
+        #region Treatment Creation
+        public void TreatmentsCreate_Click(object sender, RoutedEventArgs e)
+        {
+            //  TODO: IMPLEMENT THIS FUNCTION
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region Treatment Deletion
+        public void TreatmentsDelete_Click(object sender, RoutedEventArgs e)
+        {
+            //  TODO: IMPLEMENT THIS FUNCTION
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region View All Treatments
+        public void TreatmentsViewAll_Click(object sender, RoutedEventArgs e)
+        {
+            //  TODO: FIX THIS(MAYBE VIEW INSTEAD)
+            using (var context = new VetMgmtSystemDbEntities())
+            {
+                List<MedicalProcedure> list = context.MedicalProcedures.ToList();
+
+                var dg = new DataGrid();
+
+                dg.ItemsSource = list;
+                spMainWindow.Children.Add(dg);
+            }
+        }
+        #endregion
+
+        #region Treatments view
+        private void ViewTreatments_Click(object sender, RoutedEventArgs e)
+        {
+            using (var context = new VetMgmtSystemDbEntities())
+            {
+                List<TreatmentHistory> list = new List<TreatmentHistory>();
+                var dg = new DataGrid();
+
+                list = context.TreatmentHistories.ToList();
+                dg.ItemsSource = list;
+                spMainWindow.Children.Add(dg);
+            }
+        }
+        #endregion
+
+        #region Invoice Creation
+        private void CreateInvoices_Click(object sender, RoutedEventArgs e)
+        {
+            // Clear stackpanel
+            spMainWindow.Children.Clear();
+
+            Button createInvoiceButton = new Button() { Content = "Create Invoice", HorizontalAlignment = HorizontalAlignment.Center };
+            createInvoiceButton.Click += CreateInvoiceButton_Click;
 
             spMainWindow.Children.Add(new Label { Content = "Search Owners", HorizontalAlignment = HorizontalAlignment.Center });
             spMainWindow.Children.Add(tbOwnerName);
-            spMainWindow.Children.Add(searchInvoiceButton);
+            spMainWindow.Children.Add(createInvoiceButton);
         }
 
-        private void SearchInvoiceButton_Click(object sender, RoutedEventArgs e)
+        private void CreateInvoiceButton_Click(object sender, RoutedEventArgs e)
         {
             ViewInvoicesWindow viewInvoicesWindow = new ViewInvoicesWindow();
             viewInvoicesWindow.Show();
         }
+        #endregion
     }
 }

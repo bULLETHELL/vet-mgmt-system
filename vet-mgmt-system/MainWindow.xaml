@@ -11,15 +11,28 @@
             <MenuItem Header="_User Management">
                 <MenuItem Header="_Create" Click="UserMgmtCreate_Click"/>
                 <MenuItem Header="_Delete" Click="UserMgmtDelete_Click"/>
+                <MenuItem Header="_View all" Click="UserMgmtViewAll_Click"/>
             </MenuItem>
-            <MenuItem Header="_View">
-                <MenuItem Header="_Treatments" Click="ViewTreatments_Click"/>
-                <MenuItem Header="_Invoices" Click="ViewInvoices_Click"/>
+            <MenuItem Header="_Patient Management">
+                <MenuItem Header="_Create" Click="PatientMgmtCreate_Click"/>
+                <MenuItem Header="_Delete" Click="PatientMgmtDelete_Click"/>
+                <MenuItem Header="_View all" Click="PatientMgmtViewAll_Click"/>
+            </MenuItem>
+            <MenuItem Header="_Treatments">
+                <MenuItem Header="_Create" Click="TreatmentsCreate_Click"/>
+                <MenuItem Header="_Delete" Click="TreatmentsDelete_Click"/>
+                <MenuItem Header="_View all" Click="TreatmentsViewAll_Click"/>
+            </MenuItem>
+            <MenuItem Header="_Invoices">
+                <MenuItem Header="_Create" Click="CreateInvoices_Click"/>
+                <MenuItem Header="_View all"/>
+            </MenuItem>
+            <MenuItem Header="_Views">
+                <MenuItem Header="_Treatment view" Click="ViewTreatments_Click"/>
             </MenuItem>
         </Menu>
         <StackPanel Name="spMainWindow">
-            
+
         </StackPanel>
-            <TextBox AcceptsReturn="True" />
     </DockPanel>
 </Window>
