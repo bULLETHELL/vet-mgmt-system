@@ -26,6 +26,13 @@ namespace vet_mgmt_system
         TextBox tbCity = new TextBox();
         TextBox tbStreetName = new TextBox();
         TextBox tbStreetNo = new TextBox();
+        TextBox tbPatientName = new TextBox();
+        TextBox tbPatientAge = new TextBox();
+        TextBox tbPatientAnimal = new TextBox();
+        TextBox tbTreatmentName = new TextBox();
+        TextBox tbTreatmentPrice = new TextBox();
+        ComboBox cbOwners = new ComboBox();
+        ComboBox cbTreatments = new ComboBox();
         List<Owner> ownersList = new List<Owner>();
         List<Owner> uOwnersList = new List<Owner>();
         #endregion
@@ -36,20 +43,20 @@ namespace vet_mgmt_system
             // Clear stackpanel
             spMainWindow.Children.Clear();
 
-            Button createButton = new Button() { Content = "Create" };
+            Button createButton = new Button() { Content = "Create Owner" };
             createButton.Click += OwnerCreateButton_Click;
 
-            spMainWindow.Children.Add(new Label { Content = "First Name", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(new Label { Content = "First Name" });
             spMainWindow.Children.Add(tbFirstName);
-            spMainWindow.Children.Add(new Label { Content = "Last Name", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(new Label { Content = "Last Name" });
             spMainWindow.Children.Add(tbLastName);
-            spMainWindow.Children.Add(new Label { Content = "Zip Code", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(new Label { Content = "Zip Code" });
             spMainWindow.Children.Add(tbZipCode);
-            spMainWindow.Children.Add(new Label { Content = "City", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(new Label { Content = "City" });
             spMainWindow.Children.Add(tbCity);
-            spMainWindow.Children.Add(new Label { Content = "Street Name", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(new Label { Content = "Street Name" });
             spMainWindow.Children.Add(tbStreetName);
-            spMainWindow.Children.Add(new Label { Content = "Street Number", HorizontalAlignment = HorizontalAlignment.Center });
+            spMainWindow.Children.Add(new Label { Content = "Street Number" });
             spMainWindow.Children.Add(tbStreetNo);
             spMainWindow.Children.Add(createButton);
         }
@@ -128,28 +135,12 @@ namespace vet_mgmt_system
 
         private void OwnerSearchButton_Click(object sender, RoutedEventArgs e)
         {
-            using (var context = new VetMgmtSystemDbEntities())
-            {
-                ownersList = context.Owners.ToList();
-                uOwnersList = ownersList.FindAll(o => o.FirstName == tbFirstName.Text && o.LastName == tbLastName.Text);
-                var lb = new ListBox();
-                Button deleteOwnerButton = new Button() { Content = "Delete" };
-
-                deleteOwnerButton.Click += DeleteOwnerButton_Click;
-
-                foreach (Owner owner in uOwnersList)
-                {
-                    lb.Items.Add(new ListBoxItem() { Content = $"{owner.OwnerID} {owner.FirstName} {owner.LastName} {owner.Address.StreetName} {owner.Address.StreetNo}", Name = $"lbItem{owner.OwnerID}" });
-                }
-
-                spMainWindow.Children.Add(lb);
-                spMainWindow.Children.Add(deleteOwnerButton);
-            }
+            //fucking kill meeeeeeee
         }
 
         private void DeleteOwnerButton_Click(object sender, RoutedEventArgs e)
         {
-            //throw new NotImplementedException();
+
         }
         #endregion
 
@@ -174,7 +165,80 @@ namespace vet_mgmt_system
         public void PatientMgmtCreate_Click(object sender, RoutedEventArgs e)
         {
             //  TODO: IMPLEMENT THIS FUNCTION
-            throw new NotImplementedException();
+
+            //  Clear the stackpanel
+            spMainWindow.Children.Clear();
+
+            Button createButton = new Button { Content = "Create Patient" };
+            createButton.Click += PatientCreateButton_Click;
+
+            spMainWindow.Children.Add(new Label { Content = "Patient Name" });
+            spMainWindow.Children.Add(tbPatientName);
+            spMainWindow.Children.Add(new Label { Content = "Patient Age" });
+            spMainWindow.Children.Add(tbPatientAge);
+            spMainWindow.Children.Add(new Label { Content = "Animal's Type" });
+            spMainWindow.Children.Add(tbPatientAnimal);
+
+            using (var context = new VetMgmtSystemDbEntities())
+            {
+                foreach (Owner owner in context.Owners)
+                {
+                    cbOwners.Items.Add(new ComboBoxItem { Content = $"{owner.OwnerID}. {owner.FirstName} {owner.LastName}" });
+                }
+
+                foreach (MedicalProcedure treatment in context.MedicalProcedures)
+                {
+                    cbTreatments.Items.Add(new ComboBoxItem { Content = $"{treatment.MedicalProcedureID}. {treatment.Name} {treatment.Price}" });
+                }
+            }
+            spMainWindow.Children.Add(new Label { Content = "Choose the Patient's Owner" });
+            spMainWindow.Children.Add(cbOwners);
+
+            spMainWindow.Children.Add(new Label { Content = "Choose the Patient's Treatment" });
+            spMainWindow.Children.Add(cbTreatments);
+            spMainWindow.Children.Add(createButton);
+        }
+
+        private void PatientCreateButton_Click(object sender, RoutedEventArgs e)
+        {
+            string trimmedOwnerString = cbOwners.SelectedItem.ToString().Remove(0, 38);
+            string ownerId = trimmedOwnerString.Remove(trimmedOwnerString.IndexOf('.'));
+
+            string trimmedTreatmentString = cbTreatments.SelectedItem.ToString().Remove(0, 38);
+            string treatmentId = trimmedTreatmentString.Remove(trimmedTreatmentString.IndexOf('.'));
+
+            using (var context = new VetMgmtSystemDbEntities())
+            {
+                if (!context.Animals.Any(a => a.AnimalName == tbPatientAnimal.Text))
+                {
+                    var date = new Date
+                    {
+                        Date1 = DateTime.Today
+                    };
+
+                    context.Dates.Add(date);
+
+                    var animal = new Animal
+                    {
+                        AnimalName = tbPatientAnimal.Text
+                    };
+
+                    context.Animals.Add(animal);
+
+                    var patient = new Patient
+                    {
+                        Name = tbPatientName.Text,
+                        Age = Convert.ToInt32(tbPatientAge.Text),
+                        OwnerID = Convert.ToInt32(ownerId),
+                        AnimalID = animal.AnimalID,
+                        MedicalProcedureID = Convert.ToInt32(treatmentId)
+                    };
+
+                    context.Patients.Add(patient);
+
+                    context.SaveChanges();
+                }
+            }
         }
         #endregion
 
@@ -205,8 +269,35 @@ namespace vet_mgmt_system
         #region Treatment Creation
         public void TreatmentsCreate_Click(object sender, RoutedEventArgs e)
         {
-            //  TODO: IMPLEMENT THIS FUNCTION
-            throw new NotImplementedException();
+            spMainWindow.Children.Clear();
+
+            Button createButton = new Button { Content = "Create Treatment"};
+            createButton.Click += CreateTreatmentButton_Click;
+
+            spMainWindow.Children.Add(new Label { Content = "Treatment Name" });
+            spMainWindow.Children.Add(tbTreatmentName);
+            spMainWindow.Children.Add(new Label { Content = "Treatment Price" });
+            spMainWindow.Children.Add(tbTreatmentPrice);
+            spMainWindow.Children.Add(createButton);
+        }
+
+        private void CreateTreatmentButton_Click(object sender, RoutedEventArgs e)
+        {
+            using (var context = new VetMgmtSystemDbEntities())
+            {
+                if (!context.MedicalProcedures.Any(m => m.Name == tbTreatmentName.Text))
+                {
+                    var treatment = new MedicalProcedure
+                    {
+                        Name = tbTreatmentName.Text,
+                        Price = Convert.ToDouble(tbTreatmentPrice.Text)
+                    };
+
+                    context.MedicalProcedures.Add(treatment);
+
+                    context.SaveChanges();
+                }
+            }
         }
         #endregion
 
@@ -271,3 +362,4 @@ namespace vet_mgmt_system
         #endregion
     }
 }
+
