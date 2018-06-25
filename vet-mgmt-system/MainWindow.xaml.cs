@@ -110,6 +110,7 @@ namespace vet_mgmt_system
                     var popup = new Popup();
                     var dockPanel = new DockPanel();
                     popup.Child = dockPanel;
+                    popup.HorizontalAlignment = HorizontalAlignment.Center;
                     dockPanel.Children.Add(new TextBox { Text = "First Child" });
                     popup.IsOpen = true;
                 }
@@ -135,12 +136,47 @@ namespace vet_mgmt_system
 
         private void OwnerSearchButton_Click(object sender, RoutedEventArgs e)
         {
-            //fucking kill meeeeeeee
+            Button deleteButton = new Button { Content = "Delete Selected Owner"};
+            deleteButton.Click += DeleteOwnerButton_Click;
+            using (var context = new VetMgmtSystemDbEntities()) 
+            {
+                foreach (Owner owner in context.Owners)
+                {
+                    if (owner.FirstName == tbFirstName.Text && owner.LastName == tbLastName.Text)
+                    {
+                        cbOwners.Items.Add(new ComboBoxItem { Content = $"{owner.OwnerID}. {owner.FirstName} {owner.LastName} {owner.Address.StreetName} {owner.Address.StreetNo}" });
+                    }
+                }
+            }
+
+            spMainWindow.Children.Add(cbOwners);
+            spMainWindow.Children.Add(deleteButton);
         }
 
         private void DeleteOwnerButton_Click(object sender, RoutedEventArgs e)
         {
+            if (cbOwners.SelectedItem != null)
+            {
+                string trimmedOwnerString = cbOwners.SelectedItem.ToString().Remove(0, 38);
+                string stringOwnerId = trimmedOwnerString.Remove(trimmedOwnerString.IndexOf('.'));
+                int ownerId = Convert.ToInt32(stringOwnerId);
 
+                using (var context = new VetMgmtSystemDbEntities())
+                {
+                    var owner = context.Owners.Find(ownerId);
+                    var patient = context.Patients.FirstOrDefault(p => p.OwnerID == ownerId);
+                    var patientTreatment = context.PatientsMedicalProcedures.FirstOrDefault(t => t.PatientID == patient.PatientID);
+
+                    context.PatientsMedicalProcedures.Remove(patientTreatment);
+                    context.SaveChanges();
+
+                    context.Patients.Remove(patient);
+                    context.SaveChanges();
+
+                    context.Owners.Remove(owner);
+                    context.SaveChanges();
+                }
+            }
         }
         #endregion
 
@@ -328,6 +364,8 @@ namespace vet_mgmt_system
         #region Treatments view
         private void ViewTreatments_Click(object sender, RoutedEventArgs e)
         {
+            spMainWindow.Children.Clear();
+
             using (var context = new VetMgmtSystemDbEntities())
             {
                 List<TreatmentHistory> list = new List<TreatmentHistory>();
