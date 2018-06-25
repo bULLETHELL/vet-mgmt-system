@@ -33,6 +33,7 @@ namespace vet_mgmt_system
         TextBox tbTreatmentPrice = new TextBox();
         ComboBox cbOwners = new ComboBox();
         ComboBox cbTreatments = new ComboBox();
+        ComboBox cbPatients = new ComboBox();
         List<Owner> ownersList = new List<Owner>();
         List<Owner> uOwnersList = new List<Owner>();
         #endregion
@@ -281,8 +282,72 @@ namespace vet_mgmt_system
         #region Patient Deletion
         public void PatientMgmtDelete_Click(object sender, RoutedEventArgs e)
         {
-            //  TODO: IMPLEMENT THIS FUNCTION
-            throw new NotImplementedException();
+            spMainWindow.Children.Clear();
+
+            Button searchPatientsButton = new Button { Content = "Search Patients" };
+            searchPatientsButton.Click += SearchPatientsButton_Click;
+
+            using (var context = new VetMgmtSystemDbEntities())
+            {
+                foreach (Owner owner in context.Owners)
+                {
+                    cbOwners.Items.Add(new ComboBoxItem { Content = $"{owner.OwnerID}. {owner.FirstName} {owner.LastName}" });
+                }
+            }
+
+            spMainWindow.Children.Add(new Label { Content = "Patient's Owner" });
+            spMainWindow.Children.Add(cbOwners);
+            spMainWindow.Children.Add(searchPatientsButton);
+        }
+
+        private void SearchPatientsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (cbOwners.SelectedItem != null)
+            {
+                string trimmedOwnerString = cbOwners.SelectedItem.ToString().Remove(0, 38);
+                string ownerId = trimmedOwnerString.Remove(trimmedOwnerString.IndexOf('.'));
+                Button deletePatientButton = new Button { Content = "Delete Selected Patient" };
+                deletePatientButton.Click += DeletePatientButton_Click;
+
+                using (var context = new VetMgmtSystemDbEntities())
+                {
+                    foreach (Patient patient in context.Patients)
+                    {
+                        if (patient.OwnerID == Convert.ToInt32(ownerId))
+                        {
+                            cbPatients.Items.Add(new ComboBoxItem { Content = $"{patient.PatientID}. {patient.Name} {patient.Age} years old {patient.Animal.AnimalName}" });
+                        }
+                    }
+
+                    spMainWindow.Children.Add(new Label { Content = "Select a patient to delete" });
+                    spMainWindow.Children.Add(cbPatients);
+                    spMainWindow.Children.Add(deletePatientButton);
+                }
+            }
+        }
+
+        private void DeletePatientButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (cbPatients.SelectedItem != null)
+            {
+                string trimmedPatientString = cbPatients.SelectedItem.ToString().Remove(0, 38);
+                string patientIdString = trimmedPatientString.Remove(trimmedPatientString.IndexOf('.'));
+                int patientId = Convert.ToInt32(patientIdString);
+
+                using (var context = new VetMgmtSystemDbEntities())
+                {
+                    var patientToDelete = context.Patients.Find(patientId);
+                    var patientTreatmentToDelete = context.PatientsMedicalProcedures.FirstOrDefault(t => t.PatientID == patientId);
+
+                    context.PatientsMedicalProcedures.Remove(patientTreatmentToDelete);
+                    context.SaveChanges();
+
+                    context.Patients.Remove(patientToDelete);
+                    context.SaveChanges();
+
+
+                }
+            }
         }
         #endregion
 
