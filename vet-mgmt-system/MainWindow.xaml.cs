@@ -64,14 +64,18 @@ namespace vet_mgmt_system
 
         private void OwnerCreateButton_Click(object sender, RoutedEventArgs e)
         {
+
+            int zipCode = Convert.ToInt32(tbZipCode.Text);
             //  Using the database
             using (var context = new VetMgmtSystemDbEntities())
             {
-                //  Check if address and zipCity already exists in the database to avoid redundant data and FK errors
-                if (!context.Addresses.Any(a => a.StreetName == tbStreetName.Text && a.StreetNo == tbStreetNo.Text) && !context.ZipCities.Any(z => z.ZipCode == Convert.ToInt32(tbZipCode.Text) && z.City == tbCity.Text))
+                var address = new Address();
+
+                //  Check if address already exists in the database to avoid redundant data and FK errors
+                if (!context.Addresses.Any(a => a.StreetName == tbStreetName.Text && a.StreetNo == tbStreetNo.Text))
                 {
                     //  Make new instance of Address object
-                    var address = new Address()
+                    address = new Address()
                     {
                         StreetName = tbStreetName.Text,
                         StreetNo = tbStreetNo.Text
@@ -79,7 +83,15 @@ namespace vet_mgmt_system
 
                     //  Add address object to addresses table
                     context.Addresses.Add(address);
+                }
+                else
+                {
+                    address = context.Addresses.FirstOrDefault(a => a.StreetName == tbStreetName.Text && a.StreetNo == tbStreetNo.Text);
+                }
 
+                //  Check that the entry doesn't already exist
+                if (!context.ZipCities.Any(z => z.ZipCode == zipCode && z.City == tbCity.Text))
+                {
                     //  Make instance of ZipCity object
                     var zipCity = new ZipCity()
                     {
@@ -89,7 +101,11 @@ namespace vet_mgmt_system
 
                     //  Add ZipCity object to ZipCities table
                     context.ZipCities.Add(zipCity);
+                }
 
+                //  Check that the exact entry doesn't already exist
+                if (!context.Owners.Any(o => o.FirstName == tbFirstName.Text && o.LastName == tbLastName.Text) && !context.Addresses.Any(a => a.StreetName == tbStreetName.Text && a.StreetNo == tbStreetNo.Text) && !context.ZipCities.Any(z => z.ZipCode == zipCode && z.City == tbCity.Text))
+                {
                     //  Make instance of owner object
                     var owner = new Owner()
                     {
@@ -104,16 +120,14 @@ namespace vet_mgmt_system
 
                     //  Save changes to DB
                     context.SaveChanges();
+
+                    var popupCreationSuccess = new Popup("Success", $"Successfully Created User {owner.FirstName} {owner.LastName}!");
+
+                    ClearAllTextBoxesInStackPanel(spMainWindow);
                 }
                 else
                 {
-                    // Create popup
-                    var popup = new Popup();
-                    var dockPanel = new DockPanel();
-                    popup.Child = dockPanel;
-                    popup.HorizontalAlignment = HorizontalAlignment.Center;
-                    dockPanel.Children.Add(new TextBox { Text = "First Child" });
-                    popup.IsOpen = true;
+                    var popupCreationFailed = new Popup("Failed", "Failed To Create Owner");
                 }
             }
         }
@@ -137,9 +151,10 @@ namespace vet_mgmt_system
 
         private void OwnerSearchButton_Click(object sender, RoutedEventArgs e)
         {
-            Button deleteButton = new Button { Content = "Delete Selected Owner"};
+            Button deleteButton = new Button { Content = "Delete Selected Owner" };
             deleteButton.Click += DeleteOwnerButton_Click;
-            using (var context = new VetMgmtSystemDbEntities()) 
+
+            using (var context = new VetMgmtSystemDbEntities())
             {
                 foreach (Owner owner in context.Owners)
                 {
@@ -150,8 +165,11 @@ namespace vet_mgmt_system
                 }
             }
 
-            spMainWindow.Children.Add(cbOwners);
-            spMainWindow.Children.Add(deleteButton);
+            if (!spMainWindow.Children.Contains(cbOwners) && !spMainWindow.Children.Contains(deleteButton))
+            {
+                spMainWindow.Children.Add(cbOwners);
+                spMainWindow.Children.Add(deleteButton);
+            }
         }
 
         private void DeleteOwnerButton_Click(object sender, RoutedEventArgs e)
@@ -165,18 +183,32 @@ namespace vet_mgmt_system
                 using (var context = new VetMgmtSystemDbEntities())
                 {
                     var owner = context.Owners.Find(ownerId);
-                    var patient = context.Patients.FirstOrDefault(p => p.OwnerID == ownerId);
-                    var patientTreatment = context.PatientsMedicalProcedures.FirstOrDefault(t => t.PatientID == patient.PatientID);
+                    var patient = new Patient();
+                    var patientTreatment = new PatientsMedicalProcedure();
 
-                    context.PatientsMedicalProcedures.Remove(patientTreatment);
-                    context.SaveChanges();
+                    if (context.Patients.Any(p => p.OwnerID == ownerId))
+                    {
+                        patient = context.Patients.FirstOrDefault(p => p.OwnerID == ownerId);
+                        context.Patients.Remove(patient);
+                        context.SaveChanges();
+                    }
 
-                    context.Patients.Remove(patient);
-                    context.SaveChanges();
+                    if (context.PatientsMedicalProcedures.Any(t => t.PatientID == patient.PatientID))
+                    {
+                        patientTreatment = context.PatientsMedicalProcedures.FirstOrDefault(t => t.PatientID == patient.PatientID);
+                        context.PatientsMedicalProcedures.Remove(patientTreatment);
+                        context.SaveChanges();
+                    }
 
                     context.Owners.Remove(owner);
                     context.SaveChanges();
                 }
+
+                var popupDeleteSuccess = new Popup("Success", "Successfully Deleted Owner");
+            }
+            else
+            {
+                var popupDeleteFail = new Popup("Failed", "Failed To Delete Owner");
             }
         }
         #endregion
@@ -246,34 +278,48 @@ namespace vet_mgmt_system
 
             using (var context = new VetMgmtSystemDbEntities())
             {
-                if (!context.Animals.Any(a => a.AnimalName == tbPatientAnimal.Text))
+                var date = new Date
                 {
-                    var date = new Date
-                    {
-                        Date1 = DateTime.Today
-                    };
+                    Date1 = DateTime.Today
+                };
 
+                if (!context.Dates.Any(d => d.Date1 == date.Date1))
+                {
                     context.Dates.Add(date);
+                }
 
-                    var animal = new Animal
-                    {
-                        AnimalName = tbPatientAnimal.Text
-                    };
+                var animal = new Animal
+                {
+                    AnimalName = tbPatientAnimal.Text
+                };
 
+                if (!context.Animals.Any(a => a.AnimalName == animal.AnimalName))
+                {
                     context.Animals.Add(animal);
+                }
+                else
+                {
+                    animal = context.Animals.FirstOrDefault(a => a.AnimalName == tbPatientAnimal.Text);
+                }
 
-                    var patient = new Patient
-                    {
-                        Name = tbPatientName.Text,
-                        Age = Convert.ToInt32(tbPatientAge.Text),
-                        OwnerID = Convert.ToInt32(ownerId),
-                        AnimalID = animal.AnimalID,
-                        MedicalProcedureID = Convert.ToInt32(treatmentId)
-                    };
+                var patient = new Patient
+                {
+                    Name = tbPatientName.Text,
+                    Age = Convert.ToInt32(tbPatientAge.Text),
+                    OwnerID = Convert.ToInt32(ownerId),
+                    AnimalID = animal.AnimalID,
+                    MedicalProcedureID = Convert.ToInt32(treatmentId)
+                };
 
+                if (!context.Patients.Any(p => p.Name == patient.Name && p.Age == patient.Age && p.OwnerID == patient.OwnerID && p.AnimalID == patient.AnimalID))
+                {
                     context.Patients.Add(patient);
-
                     context.SaveChanges();
+                    var popupCreationSuccess = new Popup("Success", $"Successfully Created Patient {patient.Name}!");
+                }
+                else
+                {
+                    var popupCreationFailed = new Popup("Failed", $"Failed To Create Patient {patient.Name}.");
                 }
             }
         }
@@ -345,8 +391,12 @@ namespace vet_mgmt_system
                     context.Patients.Remove(patientToDelete);
                     context.SaveChanges();
 
-
+                    var popupDeletionSuccess = new Popup("Success", "Successfully Deleted Patient");
                 }
+            }
+            else
+            {
+                var popupCreationFailed = new Popup("Failed", "Failed To Delete Patient");
             }
         }
         #endregion
@@ -372,7 +422,7 @@ namespace vet_mgmt_system
         {
             spMainWindow.Children.Clear();
 
-            Button createButton = new Button { Content = "Create Treatment"};
+            Button createButton = new Button { Content = "Create Treatment" };
             createButton.Click += CreateTreatmentButton_Click;
 
             spMainWindow.Children.Add(new Label { Content = "Treatment Name" });
@@ -463,6 +513,13 @@ namespace vet_mgmt_system
             viewInvoicesWindow.Show();
         }
         #endregion
+
+        public void ClearAllTextBoxesInStackPanel(StackPanel sp)
+        {
+            foreach (TextBox tb in sp.Children)
+            {
+                if (tb.GetType() == typeof(TextBox)) { tb.Text = ""; }
+            }
+        }
     }
 }
-
