@@ -22,7 +22,7 @@ namespace vet_mgmt_system
             using (var context = new VetMgmtSystemDbEntities())
             {
                 // Variable instantiation
-                var invoices = context.proc_GetInvoiceByOwnerName(mainWindow.tbOwnerName.Text);
+                var invoices = context.proc_GetInvoiceByOwnerName(mainWindow.tbOwnerName.Text.Replace(" ", string.Empty));
                 List<string> patients = new List<string>();
                 List<string> treatments = new List<string>();
                 List<string> prices = new List<string>();
